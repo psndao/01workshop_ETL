@@ -2,31 +2,31 @@ import pandas as pd
 from pathlib import Path
 
 def transform_data(df: pd.DataFrame) -> pd.DataFrame:
-    """Nettoyer et transformer les données extraites"""
+    """Nettoyage et transformation des données extraites"""
     
-    # Supprimer les doublons
+    # Suppression des doublons
     df = df.drop_duplicates()
     
-    # Supprimer les lignes avec des valeurs critiques manquantes
+    # Suppression des lignes avec des valeurs critiques manquantes
     df = df.dropna(subset=["First Name", "Last Name", "Email"])
     
-    # Normaliser les chaînes
+    # Normalisation des chaînes
     df["Country"] = df["Country"].str.strip().str.title()
     df["Technology"] = df["Technology"].str.strip().str.title()
     df["Seniority"] = df["Seniority"].str.strip().str.title()
     
-    # Convertir la date
+    # Conversion de la date
     df["Application Date"] = pd.to_datetime(df["Application Date"], errors="coerce")
     
-    # Convertir les colonnes numériques
+    # Conversion des colonnes numériques
     numeric_cols = ["YOE", "Code Challenge Score", "Technical Interview Score"]
     for col in numeric_cols:
         df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0).astype(int)
     
-    # Nettoyer les emails (tout en minuscules)
+    # Nettoyage des emails 
     df["Email"] = df["Email"].str.strip().str.lower()
     
-    # Statistiques rapides
+    # Statistiques basiques
     print("Données transformées :")
     print(df.info())
     
